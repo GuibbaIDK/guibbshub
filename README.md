@@ -32,8 +32,9 @@ RollbackButton.MouseButton1Click:Connect(function()
     RollbackButton.Text = "Rollback Ativado"
     print("Rollback ativado!")
 
-    -- Salva os valores atuais como "estado inicial" (inclusive tempo jogado se possível)
-    if game.Players.LocalPlayer:FindFirstChild("leaderstats") then
+ -- Salva os valores atuais como "estado inicial"
+    
+ if game.Players.LocalPlayer:FindFirstChild("leaderstats") then
         for _, v in pairs(game.Players.LocalPlayer.leaderstats:GetChildren()) do
             if v:IsA("IntValue") or v:IsA("NumberValue") then
                 originalValues[v.Name] = v.Value
@@ -73,6 +74,21 @@ RejoinButton.MouseButton1Click:Connect(function()
     local player = game.Players.LocalPlayer
     print("Reentrando no jogo...")  -- Log de Debug
     TeleportService:Teleport(game.PlaceId, player)
+end)
+
+-- Função para garantir que os dados não sejam revertidos após o rollback
+game.Players.LocalPlayer.Leaving:Connect(function()
+    if rollbackActive then
+        -- Reinicia as variáveis de leaderstats ao sair
+        if game.Players.LocalPlayer:FindFirstChild("leaderstats") then
+            for _, v in pairs(game.Players.LocalPlayer.leaderstats:GetChildren()) do
+                if v:IsA("IntValue") or v:IsA("NumberValue") then
+                    v.Value = originalValues[v.Name] or v.Value
+                    print("Valor restaurado após rollback: " .. v.Name .. " = " .. v.Value)
+                end
+            end
+        end
+    end
 end)
 
 print("Script de rollback com GUI e rejoin carregado com sucesso!")
