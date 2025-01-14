@@ -32,9 +32,8 @@ RollbackButton.MouseButton1Click:Connect(function()
     RollbackButton.Text = "Rollback Ativado"
     print("Rollback ativado!")
 
- -- Salva os valores atuais como "estado inicial"
-    
- if game.Players.LocalPlayer:FindFirstChild("leaderstats") then
+  -- Salva os valores atuais como "estado inicial"
+    if game.Players.LocalPlayer:FindFirstChild("leaderstats") then
         for _, v in pairs(game.Players.LocalPlayer.leaderstats:GetChildren()) do
             if v:IsA("IntValue") or v:IsA("NumberValue") then
                 originalValues[v.Name] = v.Value
@@ -53,7 +52,7 @@ StopButton.MouseButton1Click:Connect(function()
     print("Rollback desativado!")
 end)
 
--- Função para interceptar alterações nos valores de moedas e impedir alterações
+-- Função para interceptar alterações nos valores de moedas (gemas) e impedir alterações
 local mt = getrawmetatable(game)
 local oldIndex = mt.__newindex
 
@@ -76,13 +75,14 @@ RejoinButton.MouseButton1Click:Connect(function()
     TeleportService:Teleport(game.PlaceId, player)
 end)
 
--- Função para garantir que os dados não sejam revertidos após o rollback
+-- Função para restaurar os dados ao reentrar
 game.Players.LocalPlayer.Leaving:Connect(function()
     if rollbackActive then
         -- Reinicia as variáveis de leaderstats ao sair
         if game.Players.LocalPlayer:FindFirstChild("leaderstats") then
             for _, v in pairs(game.Players.LocalPlayer.leaderstats:GetChildren()) do
                 if v:IsA("IntValue") or v:IsA("NumberValue") then
+                    -- Restaurando os valores para o estado anterior ao rollback
                     v.Value = originalValues[v.Name] or v.Value
                     print("Valor restaurado após rollback: " .. v.Name .. " = " .. v.Value)
                 end
