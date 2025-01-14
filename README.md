@@ -1,26 +1,50 @@
 loadstring([[
 -- Criação da GUI
 local ScreenGui = Instance.new("ScreenGui")
+local MainFrame = Instance.new("Frame")  -- O quadrado
+local TitleLabel = Instance.new("TextLabel")  -- O título
 local RollbackButton = Instance.new("TextButton")
 local StopButton = Instance.new("TextButton")
 local RejoinButton = Instance.new("TextButton")
 
+-- Configurações gerais do ScreenGui
 ScreenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
 ScreenGui.Name = "RollbackGUI"
 
-RollbackButton.Parent = ScreenGui
+-- Configurações do Frame (quadrado)
+MainFrame.Parent = ScreenGui
+MainFrame.Size = UDim2.new(0, 300, 0, 200)
+MainFrame.Position = UDim2.new(0.5, -150, 0.5, -100)
+MainFrame.BackgroundColor3 = Color3.fromRGB(0, 0, 0)  -- Cor preta
+MainFrame.BorderSizePixel = 3
+MainFrame.BorderColor3 = Color3.fromRGB(255, 255, 255)  -- Borda branca
+
+-- Configurações do Título
+TitleLabel.Parent = MainFrame
+TitleLabel.Size = UDim2.new(1, 0, 0.2, 0)
+TitleLabel.Position = UDim2.new(0, 0, 0, 0)
+TitleLabel.Text = "Guibbs Rollback - Anime Adventures"
+TitleLabel.TextSize = 18
+TitleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)  -- Cor branca
+TitleLabel.BackgroundTransparency = 1  -- Sem fundo
+TitleLabel.TextAlign = Enum.TextXAlignment.Center
+
+-- Configurações do botão "Ativar Rollback"
+RollbackButton.Parent = MainFrame
 RollbackButton.Size = UDim2.new(0, 200, 0, 50)
-RollbackButton.Position = UDim2.new(0.5, -100, 0.5, -90)
+RollbackButton.Position = UDim2.new(0.5, -100, 0.3, 0)
 RollbackButton.Text = "Ativar Rollback"
 
-StopButton.Parent = ScreenGui
+-- Configurações do botão "Desativar Rollback"
+StopButton.Parent = MainFrame
 StopButton.Size = UDim2.new(0, 200, 0, 50)
-StopButton.Position = UDim2.new(0.5, -100, 0.5, -30)
+StopButton.Position = UDim2.new(0.5, -100, 0.5, 0)
 StopButton.Text = "Desativar Rollback"
 
-RejoinButton.Parent = ScreenGui
+-- Configurações do botão "Reentrar"
+RejoinButton.Parent = MainFrame
 RejoinButton.Size = UDim2.new(0, 200, 0, 50)
-RejoinButton.Position = UDim2.new(0.5, -100, 0.5, 30)
+RejoinButton.Position = UDim2.new(0.5, -100, 0.7, 0)
 RejoinButton.Text = "Reentrar no Jogo"
 
 local rollbackActive = false
@@ -32,7 +56,7 @@ RollbackButton.MouseButton1Click:Connect(function()
     RollbackButton.Text = "Rollback Ativado"
     print("Rollback ativado!")
 
-  -- Salva os valores atuais como "estado inicial"
+    -- Salva os valores atuais como "estado inicial"
     if game.Players.LocalPlayer:FindFirstChild("leaderstats") then
         for _, v in pairs(game.Players.LocalPlayer.leaderstats:GetChildren()) do
             if v:IsA("IntValue") or v:IsA("NumberValue") then
